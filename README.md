@@ -3,6 +3,8 @@ A repo with tools to run OpenShift on RDO (or any other Openstack based cloud)
 
 ## rdo-install-openshift.sh
 
+A wrapper around the great tool [installcentos](https://github.com/gshipley/installcentos) created by [Grant Shipley](https://github.com/gshipley). This wrapper takes care of the creation of a server on the RDO cloud that is usable to run [installcentos](https://github.com/gshipley/installcentos) and ends up being an All-In-One OpenShift ([OKD](https://www.okd.io/)) installation.
+
 ### Usage
 
 #### Prerequisities
