@@ -60,7 +60,8 @@ EOF
 chown centos:centos provision-openshift.sh
 chmod +x provision-openshift.sh
 
-sudo -u centos tmux new-session -d -s install-openshift 'bash ./provision-openshift.sh 2>&1|tee provision-openshift.log '
+sudo -u centos tmux new-session -d -s install-openshift 'bash ./provision-openshift.sh 2>&1|tee provision-openshift.log'
+sudo -u centos tmux set-option -t install-openshift remain-on-exit on
 EOFCLOUD
 
 chmod +x /tmp/cloud-install-openshift.sh
