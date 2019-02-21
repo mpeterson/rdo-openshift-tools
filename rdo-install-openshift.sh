@@ -54,7 +54,7 @@ cat > provision-openshift.sh <<EOF
 export DOMAIN=${OKD_DOMAIN:-$OS_FIP.nip.io}
 export USERNAME=$OKD_USER
 export PASSWORD=$OKD_PASS
-curl https://raw.githubusercontent.com/gshipley/installcentos/master/install-openshift.sh | INTERACTIVE=false sudo -E bash
+curl -s https://raw.githubusercontent.com/gshipley/installcentos/master/install-openshift.sh | INTERACTIVE=false sudo -E USERNAME=$USERNAME bash
 EOF
 
 chown centos:centos provision-openshift.sh
