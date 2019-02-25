@@ -15,10 +15,15 @@ export SERVER_NAME=${1:-"okd-$(shuf -n1 /usr/share/dict/words|tr '[:upper:]' '[:
 export OS_IMAGE=${OS_IMAGE:-fdfd5d39-a76d-45df-abec-17f768ba3054}
 export OS_FLAVOR=${OS_FLAVOR:-m1.large2}
 
+echo "  | Retrieving internal network..."
 export OS_NETID=${OS_NETID:-$(openstack network list --internal -f value -c ID| head -n 1)}
+echo "  | Retrieving external network..."
 export OS_EXTNETID=${OS_EXTNETID:-$(openstack network list --external -f value -c ID| head -n 1)}
+echo "  | Retrieving available FIPs..."
 export OS_FIP=$(openstack floating ip list --status DOWN -f value -c 'Floating IP Address'|head -n1)
+echo "  | Retrieving security groups..."
 export OS_SECGRP=${OS_SECGRP:-$(openstack security group rule list --ingress --protocol tcp -f value |awk '/0.0.0.0\/0/ {split($4,port,":"); if(22>=port[1] && 22<=port[2]){print $6}}'|head -n 1)}
+echo "  | Retrieving SSH keypair..."
 export OS_KEYPAIR=${OS_KEYPAIR:-$(openstack keypair list -f value -c Name|head -n 1)}
 
 
@@ -71,14 +76,15 @@ if [ ! -z "$OS_SECGRP" ]; then
     OPT_SECGRP+=" --security-group $OS_SECGRP"
 fi
 
-echo "Creating server..."
+echo "Starting server creation..."
+echo "  | Creating server..."
 openstack server create --flavor $OS_FLAVOR $OPT_SECGRP --key-name "$OS_KEYPAIR" --image $OS_IMAGE --nic net-id=$OS_NETID --user-data /tmp/cloud-install-openshift.sh $SERVER_NAME > /tmp/$SERVER_NAME-creation.log 2>&1
 if [ $? -ne 0 ]; then
     echo "ERROR: Server could not be created. View logs at /tmp/$SERVER_NAME-creation.log"
     exit 1
 fi
 
-echo "Assigning FIP..."
+echo "  | Assigning FIP..."
 openstack server add floating ip $SERVER_NAME $OS_FIP > /tmp/$SERVER_NAME-fip.log 2>&1
 if [ $? -ne 0 ]; then
     echo "ERROR: Server could not be assigned a FIP. View logs at /tmp/$SERVER_NAME-fip.log"
