@@ -11,7 +11,7 @@ if [ -z "$OKD_USER" ] || [ -z "$OKD_PASS" ]; then
 fi
 
 echo "Preparing for server creation..."
-export SERVER_NAME=${1:-"okd-$(shuf -n1 /usr/share/dict/words|tr '[:upper:]' '[:lower:]')"}
+export SERVER_NAME=${1:-"okd-$(date|sha256sum|head -c 5)"}
 export OS_IMAGE=${OS_IMAGE:-fdfd5d39-a76d-45df-abec-17f768ba3054}
 export OS_FLAVOR=${OS_FLAVOR:-m1.large2}
 
