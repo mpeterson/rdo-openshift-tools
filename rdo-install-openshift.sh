@@ -33,7 +33,7 @@ if [ -z "$OS_NETID" ] || [ -z "$OS_EXTNETID" ]; then
 fi
 
 if [ -z "$OS_KEYPAIR" ]; then
-   echo "ERROR: Could not find a SSH key to provide you SSH access with."
+   echo "ERROR: Could not find a SSH keypair to provide SSH access with."
    exit 1
 fi
 
@@ -113,7 +113,7 @@ else
 fi
 
 echo
-echo 'To view the tmux of the openshift installation run:
+echo 'Once ssh-ed into the server, view the installation progress by running:
 
     tmux a -t install-openshift
 
